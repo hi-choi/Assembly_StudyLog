@@ -1,0 +1,72 @@
+# 유클리드 호제법을 사용해 최대공약수 구하기
+.text
+
+main : 
+ li $v0, 5
+ syscall
+ move $t0, $v0
+
+ li $v0, 5
+ syscall
+ move $t1, $v0
+ 
+ addi $sp, $sp, -12          # 4*3 스택공간 할당
+ sw $t0, 0($sp)               # push
+ sw $t1, 4($sp)               # push
+
+ slt $s0, $t0, $t1             # gcd 첫번째 입력 값 > 두번째 입력 값 
+ beq $s0, 1, gcd2           # gcd2 첫번째 입력 값 < 두번째 입력 값   
+
+gcd :
+
+ beq $t1, 0, end           
+ 
+ div $t0, $t1
+ mfhi $t2
+ sw $t2, 8($sp)               
+ 
+ sw $t1, 0($sp)              
+ sw $t2, 4($sp)               
+ 
+ lw $t0, 0($sp)
+ lw $t1, 4($sp)
+ lw $t2, 8($sp)
+
+
+ addi $sp, $sp, 12          
+ j gcd
+
+gcd2 :
+
+ beq $t0, 0, end2             
+ 
+ div $t1, $t0
+ mfhi $t2
+ sw $t2, 8($sp)               
+ 
+ sw $t0, 0($sp)               
+ sw $t2, 4($sp)               
+ 
+ lw $t1, 0($sp)
+ lw $t0, 4($sp)
+ lw $t2, 8($sp)
+
+ addi $sp, $sp, 12
+ j gcd2
+
+end :                          # gcd 종료
+  move $a0, $t0
+  li $v0, 1
+  syscall
+
+  li $v0, 10
+  syscall
+ 
+
+end2 :                        # gcd2 종료
+ move $a0, $t1
+ li $v0, 1
+ syscall
+
+ li $v0, 10
+ syscall 
