@@ -1,0 +1,36 @@
+# n! 구하기
+.data
+ n : .word 0
+.text
+
+main : 
+ li $s0, 1
+
+ li $v0, 5            #n입력받기
+ syscall
+ sw $v0, n
+ lw $s1, n
+ mul $t0, $s1, 4
+ sub $sp, $sp, $t0               # 스택 할당
+
+fact : 
+ beq $s1, 1, end               #n=1이면 return으로
+ sw $s1, 0($sp)                    # n(a0) 
+ jal fact2
+ j fact
+
+end : 
+ move $a0, $s0
+ li $v0, 1
+ syscall
+
+ add $sp, $sp, $t0                # 스택 반환
+ li $v0, 10
+ syscall
+
+fact2 : 
+ lw $s1, 0($sp)                   # pop
+ mul $s0, $s0, $s1              # n*(n-1)
+ sub $s1, $s1, 1                 # n-1
+
+ jr $ra
