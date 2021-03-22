@@ -1,0 +1,29 @@
+# 1부터 입력 받은 양의 정수까지의 총합 구하기
+.data
+  use_input: .word 0
+
+.text
+
+main :
+  li $v0, 5
+  syscall
+  sw $v0, use_input
+  lw $t0, use_input
+  li $t1, 0
+
+while :
+  beq $t0, 0, end
+  add $t1, $t1, $t0
+  sub $t0, $t0, 1
+  j while
+
+  li $v0, 10
+  syscall
+
+end :
+  move $a0, $t1
+  li $v0, 1
+  syscall
+
+  li $v0, 10
+  syscall
