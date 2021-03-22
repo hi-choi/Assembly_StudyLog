@@ -1,0 +1,39 @@
+# 입력받은 값의 홀짝 구별하기
+.data
+    odd : .asciiz "ODD"
+    even : .asciiz "EVEN"
+.text
+
+main:
+
+    li $v0, 5       #값 입력받기
+    syscall
+    move $t0, $v0
+
+    li $t1, 2
+    li $t2, 1
+
+    div $t0 $t1     #나머지 구하기
+    mfhi $s0        
+
+    beq $s0 $t2 fun1 #홀수
+
+    bne $s0 $t2 fun2 #짝수
+
+
+fun1 :          
+    la $a0, odd
+    li $v0, 4
+    syscall
+    
+    li $v0, 10
+    syscall
+
+fun2 :
+    la $a0, even
+    li $v0, 4
+    syscall
+
+    li $v0,10
+    syscall
+
